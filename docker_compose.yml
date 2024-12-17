@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  pg_master:
+    image: postgres:15
+    container_name: pg_master
+    environment:
+      POSTGRES_USER: master_user
+      POSTGRES_PASSWORD: master_pass
+      POSTGRES_DB: testDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_master_data:/var/lib/postgresql/data
+      - ./master_init:/docker-entrypoint-initdb.d  # Scripts to initialize DB
+
+  pg_replica:
+    image: postgres:15
+    container_name: pg_replica
+    environment:
+      POSTGRES_USER: replica_user
+      POSTGRES_PASSWORD: replica_pass
+      POSTGRES_DB: testDB
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_replica_data:/var/lib/postgresql/data
+
+volumes:
+  pg_master_data:
+  pg_replica_data:
