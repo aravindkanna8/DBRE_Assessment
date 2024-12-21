@@ -18,10 +18,15 @@ master-init.sql
 This script initializes the database schema and inserts sample rows into the orders table.
 
 Testing
+
 After running docker-compose up -d, you can connect to the pg_master database and verify that the table and data were created:
 
 bash
+
   "docker exec -it pg_master psql -U master_user -d testDB"
+
 Run:
+
 sql query
+
    "SELECT * FROM orders;"
