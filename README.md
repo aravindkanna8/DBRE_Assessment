@@ -86,6 +86,94 @@ Continuous Inserts: Use a Bash script (insert-orders.sh) to insert new rows cont
 
 =================================================================================================
 
+**Execute replication-setup.sql**
+
+On pg_master:
+
+Run the following command to execute the publication part of the script on the pg_master container:
+
+bash
+
+**docker exec -i pg_master psql -U master_user -d testDB -f /replication-setup.sql**
+
+This will execute the SQL file inside the pg_master container.
+
+Ensure that the script includes only the CREATE PUBLICATION command for the master.
+
+On pg_replica:
+
+For the subscription part of the replication setup, ensure the CREATE SUBSCRIPTION command is present in the replication-setup.sql file. Then, execute it on pg_replica:
+
+bash
+
+**docker exec -i pg_replica psql -U replica_user -d testDB -f /replication-setup.sql**
+
+This will establish the subscription for logical replication.
+
+**Execute partition-setup.sql**
+
+On pg_master:
+To partition the orders table on pg_master, run the following:
+
+bash
+
+**docker exec -i pg_master psql -U master_user -d testDB -f /partition-setup.sql**
+
+This will create the partitioned table and migrate data from the old orders table to the new partitioned table.
+
+**Validate Execution**
+
+Check Publication and Subscription
+
+After setting up replication:
+
+On pg_master, check the publications:
+
+sql
+
+**SELECT * FROM pg_publication;**
+
+On pg_replica, check the subscriptions:
+
+sql
+
+**SELECT * FROM pg_subscription;**
+
+
+**Verify Partitioning**
+
+On pg_master, confirm that the partitioned table and partitions exist:
+
+sql
+
+\d+ orders
+\d+ orders_2024
+\d+ orders_2025
+
+
+5. Debugging Tips
+
+If the replication or partitioning doesn't work as expected:
+
+Check container logs:
+
+bash
+
+**docker logs pg_master**
+
+**docker logs pg_replica**
+
+
+Verify network connectivity between pg_master and pg_replica:
+
+bash
+
+ping **pg_master**
+
+Ensure the pg_hba.conf on pg_master allows connections from pg_replica.
+
+====================================================================================
+
 
 
 **Execution Workflow**
@@ -112,3 +200,6 @@ Start Continuous Inserts: Run the Bash script:
 bash
 
 **bash insert-orders.sh**
+
+
+
