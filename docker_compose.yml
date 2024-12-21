@@ -1,41 +1,49 @@
 version: '3.8'
 
 services:
+  # Configuration for the primary PostgreSQL instance (Master)
   pg_master:
     image: postgres:13
-    container_name: pg_master
+    container_name: pg_master  # Name of the container for the master instance
     environment:
-      POSTGRES_USER: master_user
-      POSTGRES_PASSWORD: master_password
-      POSTGRES_DB: testDB
+      POSTGRES_USER: master_user  # Master database username
+      POSTGRES_PASSWORD: master_password  # Master database password
+      POSTGRES_DB: testDB  # Database to be created on initialization
     volumes:
+      # Persist data to avoid loss on container restart
       - pg_master_data:/var/lib/postgresql/data
+      # Run the initialization script to set up the database schema
       - ./master-init.sql:/docker-entrypoint-initdb.d/master-init.sql
     ports:
-      - "5432:5432"
+      - "5432:5432"  # Expose the master database on port 5432
     networks:
-      - pg_network
+      - pg_network  # Connect to a custom network shared with other containers
 
+  # Configuration for the replica PostgreSQL instance
   pg_replica:
     image: postgres:13
-    container_name: pg_replica
+    container_name: pg_replica  # Name of the container for the replica instance
     environment:
-      POSTGRES_USER: replica_user
-      POSTGRES_PASSWORD: replica_password
-      POSTGRES_DB: testDB
+      POSTGRES_USER: replica_user  # Replica database username
+      POSTGRES_PASSWORD: replica_password  # Replica database password
+      POSTGRES_DB: testDB  # Database to be created on initialization
     volumes:
+      # Persist data for the replica
       - pg_replica_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5433:5432"  # Expose the replica database on port 5433
     depends_on:
+      # Ensure the master service starts before the replica
       - pg_master
     networks:
-      - pg_network
+      - pg_network  # Connect to the same custom network as the master
 
+# Define persistent storage for both instances
 volumes:
-  pg_master_data:
-  pg_replica_data:
+  pg_master_data:  # Volume for master data
+  pg_replica_data:  # Volume for replica data
 
+# Define a shared network for communication between containers
 networks:
   pg_network:
-    driver: bridge
+    driver: bridge  # Use bridge driver for container communication
