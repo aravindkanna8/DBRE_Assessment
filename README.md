@@ -35,10 +35,11 @@ sql query
 
    "**SELECT * FROM orders;**"
 
-
-
-
 ============================================
+
+
+
+
 #Task 2.3: Logical Replication
 1. Enable Replication on pg_master
 We modify PostgreSQL configuration to enable logical replication.
