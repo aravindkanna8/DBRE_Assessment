@@ -11,6 +11,7 @@ pg_replica: A replica instance configured to connect to the master and replicate
 Volumes: Ensure persistence of database data even if containers are restarted.
 Networks: Both services are connected via a custom network (pg_network).
 
+=================================================
 #Task 2.2: Database Creation and Schema Setup
 We need to create a table named orders and populate it with sample data inside the pg_master.
 
@@ -31,7 +32,7 @@ sql query
 
    "**SELECT * FROM orders;**"
 
-
+============================================
 #Task 2.3: Logical Replication
 1. Enable Replication on pg_master
 We modify PostgreSQL configuration to enable logical replication.
@@ -53,8 +54,8 @@ sql
 
 " **SELECT * FROM orders;** " 
 
-
-#Task 2.4: Partition the Orders Table
+===================================
+Task 2.4: Partition the Orders Table
 
 To partition the orders table by the order_date column without downtime:
 
@@ -64,11 +65,11 @@ Create a new partitioned table:
 
 Migrate data from the old table:
 
-Continuous Inserts: Use a Bash script (insert-orders.sh) to insert new rows continuously:
+Continuous Inserts: Use a Bash script (insert-orders.sh) to insert new rows continuously.
 
 
 
-
+=================================================================================================
 
 
 
