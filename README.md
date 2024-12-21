@@ -12,6 +12,9 @@ Volumes: Ensure persistence of database data even if containers are restarted.
 Networks: Both services are connected via a custom network (pg_network).
 
 =================================================
+
+
+
 #Task 2.2: Database Creation and Schema Setup
 We need to create a table named orders and populate it with sample data inside the pg_master.
 
@@ -31,6 +34,9 @@ Run:
 sql query
 
    "**SELECT * FROM orders;**"
+
+
+
 
 ============================================
 #Task 2.3: Logical Replication
@@ -55,6 +61,10 @@ sql
 " **SELECT * FROM orders;** " 
 
 ===================================
+
+
+
+
 Task 2.4: Partition the Orders Table
 
 To partition the orders table by the order_date column without downtime:
