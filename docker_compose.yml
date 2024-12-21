@@ -2,30 +2,40 @@ version: '3.8'
 
 services:
   pg_master:
-    image: postgres:15
+    image: postgres:13
     container_name: pg_master
     environment:
       POSTGRES_USER: master_user
-      POSTGRES_PASSWORD: master_pass
+      POSTGRES_PASSWORD: master_password
       POSTGRES_DB: testDB
-    ports:
-      - "5432:5432"
     volumes:
       - pg_master_data:/var/lib/postgresql/data
-      - ./master_init:/docker-entrypoint-initdb.d  # Scripts to initialize DB
+      - ./master-init.sql:/docker-entrypoint-initdb.d/master-init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - pg_network
 
   pg_replica:
-    image: postgres:15
+    image: postgres:13
     container_name: pg_replica
     environment:
       POSTGRES_USER: replica_user
-      POSTGRES_PASSWORD: replica_pass
+      POSTGRES_PASSWORD: replica_password
       POSTGRES_DB: testDB
-    ports:
-      - "5433:5432"
     volumes:
       - pg_replica_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    depends_on:
+      - pg_master
+    networks:
+      - pg_network
 
 volumes:
   pg_master_data:
   pg_replica_data:
+
+networks:
+  pg_network:
+    driver: bridge
