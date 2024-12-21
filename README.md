@@ -23,10 +23,32 @@ After running docker-compose up -d, you can connect to the pg_master database an
 
 bash
 
-  "docker exec -it pg_master psql -U master_user -d testDB"
+  "**docker exec -it pg_master psql -U master_user -d testDB**"
 
 Run:
 
 sql query
 
-   "SELECT * FROM orders;"
+   "**SELECT * FROM orders;**"
+
+
+Task 2.3: Logical Replication
+1. Enable Replication on pg_master
+We modify PostgreSQL configuration to enable logical replication.
+
+2. Configure pg_replica as a Subscriber
+To enable replication, we create a publication on the master and subscribe to it from the replica.
+
+
+3. Validation
+Insert new data into the orders table on pg_master:
+
+sql
+
+" **INSERT INTO orders (product_name, quantity, order_date) VALUES ('Product D', 15, '2024-12-04');** "
+
+Connect to pg_replica and verify the replicated data:
+
+sql
+
+" **SELECT * FROM orders;** " 
