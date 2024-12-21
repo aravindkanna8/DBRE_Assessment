@@ -52,3 +52,41 @@ Connect to pg_replica and verify the replicated data:
 sql
 
 " **SELECT * FROM orders;** " 
+
+
+Task 2.4: Partition the Orders Table
+
+To partition the orders table by the order_date column without downtime:
+
+Partitioning Commands
+Create a new partitioned table:
+
+
+Migrate data from the old table:
+
+Continuous Inserts: Use a Bash script (insert-orders.sh) to insert new rows continuously:
+
+
+
+**Execution Workflow**
+Start the Docker Compose Setup:
+
+bash
+
+**docker-compose up -d**
+
+Run Initial Setup: Execute the master-init.sql script on pg_master:
+
+bash
+
+**docker exec -i pg_master psql -U master_user -d testDB -f /master-init.sql**
+
+Configure Replication: Execute **replication-setup.sql** on both master and replica as appropriate.
+
+Partition the Table: Run **partition-setup.sql** on pg_master to migrate the orders table to a partitioned table.
+
+Start Continuous Inserts: Run the Bash script:
+
+bash
+
+**bash insert-orders.sh**
