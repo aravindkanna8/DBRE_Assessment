@@ -68,7 +68,13 @@ Continuous Inserts: Use a Bash script (insert-orders.sh) to insert new rows cont
 
 
 
+
+
+
+
 **Execution Workflow**
+
+
 Start the Docker Compose Setup:
 
 bash
